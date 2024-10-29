@@ -59,8 +59,8 @@ export const AboutSection = () => {
                 digital experiences."
               className="px-6 pt-6"
             />
-            <ToolboxItems items={toolboxItems} />
-            <ToolboxItems items={toolboxItems} />
+            <ToolboxItems items={toolboxItems} className="mt-6" />
+            <ToolboxItems items={toolboxItems} className="mt-6" />
           </Card>
           <Card>
             <CardHeader
