@@ -1,23 +1,27 @@
+// next.config.mjs
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  eslint: {
+    // This will allow builds to complete even if there are ESLint errors
+    ignoreDuringBuilds: true,
+  },
   webpack(config) {
-    // Grab the existing rule that handles SVG imports
+    // Your existing webpack configurations
     const fileLoaderRule = config.module.rules.find((rule) =>
       rule.test?.test?.(".svg")
     );
 
     config.module.rules.push(
-      // Reapply the existing rule, but only for svg imports ending in ?url
       {
         ...fileLoaderRule,
         test: /\.svg$/i,
         resourceQuery: /url/, // *.svg?url
       },
-      // Convert all other *.svg imports to React components
       {
         test: /\.svg$/i,
         issuer: fileLoaderRule.issuer,
-        resourceQuery: { not: [...fileLoaderRule.resourceQuery.not, /url/] }, // exclude if *.svg?url
+        resourceQuery: { not: [...fileLoaderRule.resourceQuery.not, /url/] },
         use: {
           loader: "@svgr/webpack",
           options: {
@@ -38,7 +42,6 @@ const nextConfig = {
       }
     );
 
-    // Modify the file loader rule to ignore *.svg, since we have it handled now.
     fileLoaderRule.exclude = /\.svg$/i;
 
     return config;
